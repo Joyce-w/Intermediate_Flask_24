@@ -2,14 +2,14 @@
 
 {% block content %}
     <div class="container justify-content-center ">
-        <div class="row m-5">
+        <div class="row m-5 justify-content-center">
         {% for pet in pets %}
-            <div class="card" style="width: 18rem;">
+            <div class="card m-1 p-2" style="width: 17rem;">
 
                 {% if pet.photo_url %}
-                <img src={{pet.photo_url}} class="card-img-top" alt="...">
-                {% else %}
-                <h6 class="m-5">No current picture</h6>
+                    <img src={{pet.photo_url}} class="card-img-top" alt="...">
+                    {% else %}
+                    <h6 class="m-5">No current picture</h6>
                 {% endif %}
                 
                 <div class="card-body">
@@ -25,13 +25,15 @@
                     {% if pet.notes %}
                     <p class="card-text">{{pet.notes}}</p>
                     {% endif %}
-                    <p>Age: {{pet.age}}</p>
                 </div>
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <a class="btn btn-primary btn-sm" href="/{{pet.id}}" role="button">More info</a>   
+                    </div>
 
             </div>      
         {% endfor %}      
         
-        <a class="btn btn-primary" href="/add" role="button">Add Pet</a>
+        <a class="btn btn-primary " href="/add" role="button">Add Pet</a>
         </div>
     </div>
 

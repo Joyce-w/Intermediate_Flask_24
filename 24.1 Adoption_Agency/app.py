@@ -29,7 +29,6 @@ def add_pet():
     """Add new pet to adoption"""
     form = AddPetForm()
     if form.validate_on_submit():
-        flash('Pet registered!')
         #make new model
         name = form.name.data
         species = form.species.data
@@ -45,3 +44,19 @@ def add_pet():
 
     else:
         return render_template('add_pet_form.html', form=form)
+
+@app.route('/<int:pet_id>', methods=["GET","POST"])
+def display_pet(pet_id):
+    """Display information about the pet"""
+    pet = Pet.query.get_or_404(pet_id)
+    form = AddPetForm(obj=pet)
+    if form.validate_on_submit():
+        pet.photo_url = form.photo_url.data
+        pet.notes = form.notes.data
+        pet.available = form.available.data
+
+        db.session.commit()
+        return redirect('/')
+
+    else:
+        return render_template('pet_info.html', form=form)

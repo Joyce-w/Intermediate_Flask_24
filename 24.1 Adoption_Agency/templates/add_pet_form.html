@@ -1,15 +1,6 @@
 {%extends 'base.html' %}
 
 {% block content %}
-  {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <section class="messages">
-          {% for category,msg in messages %}
-          <p class="{{category}}">{{msg}}</p>
-          {% endfor  %}
-        </section>
-  {% endif %}
-  {% endwith %}
 
     <div class="container justify-content-center m-5">
         <form method="POST">
