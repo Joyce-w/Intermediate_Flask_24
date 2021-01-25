@@ -1,0 +1,45 @@
+{%extends 'base.html' %}
+
+{% block content %}
+    <div class="container justify-content-center ">
+        <div class="row m-5">
+        {% for pet in pets %}
+            <div class="card" style="width: 18rem;">
+
+                {% if pet.photo_url %}
+                <img src={{pet.photo_url}} class="card-img-top" alt="...">
+                {% else %}
+                <h6 class="m-5">No current picture</h6>
+                {% endif %}
+                
+                <div class="card-body">
+                    <h5 class="card-title">{{pet.name}} is
+                    {% if pet.available == True %}
+                    <span class="badge bg-success">Available</span>
+                    {% else %}
+                    <span class="badge bg-secondary">Unavailable</span>
+                    {% endif %}
+
+                        </h5>
+
+                    {% if pet.notes %}
+                    <p class="card-text">{{pet.notes}}</p>
+                    {% endif %}
+                    <p>Age: {{pet.age}}</p>
+                </div>
+
+            </div>      
+        {% endfor %}      
+        
+        <a class="btn btn-primary" href="/add" role="button">Add Pet</a>
+        </div>
+    </div>
+
+
+
+
+
+
+{% endblock%}
+    
+

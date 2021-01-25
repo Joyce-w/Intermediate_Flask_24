@@ -1,0 +1,33 @@
+{%extends 'base.html' %}
+
+{% block content %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <section class="messages">
+          {% for category,msg in messages %}
+          <p class="{{category}}">{{msg}}</p>
+          {% endfor  %}
+        </section>
+  {% endif %}
+  {% endwith %}
+
+    <div class="container justify-content-center m-5">
+        <form method="POST">
+            <h3>Register a new pet</h3>
+            {{ form.hidden_tag() }}
+            {% for field in form 
+                if field.widget.input_type != 'hidden' %}
+
+            <p>
+                {{field.label}}
+                {{field}}
+            </p>
+
+             {% endfor %}    
+            <button class="btn btn-primary">Add New Pet</button>
+        </form>
+
+    </div>
+
+
+{% endblock%}
