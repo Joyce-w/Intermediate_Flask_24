@@ -46,9 +46,25 @@ def get_all_cupcakes():
 
 @app.route('/api/cupcakes/<int:c_id>')
 def get_single_cupcakes(c_id):
-    """Shows list of all cupcakes in db"""
+    """Shows list of single cupcake in db"""
     cupcake = Cupcake.query.get(c_id)
     serialize = serialize_cupcake(cupcake)
 
     return jsonify(cupcakes=serialize)
 
+@app.route('/api/cupcakes', methods=["POST"])
+def new_cupcake():
+    """Add a new cupcake to db"""
+
+    flavor = request.json["flavor"]
+    size = request.json["size"]
+    rating=request.json["rating"]
+    image = request.json["image"]
+    
+    new_cupcake = Cupcake(flavor=flavor, size=size, rating=rating, image=image)
+    
+    db.session.add(new_cupcake)
+    db.session.commit()
+
+    seralize = serialize_cupcake(new_cupcake)
+    return (jsonify(cupcake=seralize), 201)
