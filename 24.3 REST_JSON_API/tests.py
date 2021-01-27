@@ -121,16 +121,14 @@ class CupcakeViewsTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIsInstance(resp.json["cupcake"]["id"], int)
-            self.assertEqual(resp.json, {'cupcake': {'flavor': 'TestCake2', 'id': 3, 'image': 'http://test.com/cupcake.jpg', 'rating': 2.0, 'size': 'TestSize'}})
             self.assertEqual(Cupcake.query.count(), 1)
 
-# How the heck do you test a delete app? 
     def test_delete_cupcake(self):
         with app.test_client() as client:
             url = f"/api/cupcakes/{self.cupcake.id}"
-            resp = client.delete(url, json={"id": self.cupcake.id})
-            import pdb;
-            pdb.set_trace
+            resp = client.delete(url)
+
             self.assertEqual(resp.status_code, 200)
-            self.assertEqual(resp.json, {'message': 'deleted cupcake'})
-            self.aserrtEqual(Cupcake.query.count(), 0)
+            data = resp.json
+            self.assertEqual(data, {"message": "deleted cupcake"})
+            self.assertEqual(Cupcake.query.count(), 0)
