@@ -16,16 +16,13 @@ def connect_db(app):
 class User(db.Model):
     __tablename__ = "users"
 
-    id = db.Column(db.Integer, primary_key=True,
-                    autoincrement=True)
-
-    username = db.Column(db.String(20))
+    username = db.Column(db.String(20),
+                    primary_key=True)
     
     password = db.Column(db.String,
                     nullable=False)
 
     email = db.Column(db.String(50),
-                    nullable=False,
                     unique=True)
 
     first_name = db.Column(db.String(30),
@@ -51,3 +48,22 @@ class User(db.Model):
             return u
         else:
             return False
+
+
+class Feedback(db.Model):
+    __tablename__ = "feedbacks"
+
+    id = db.Column(db.Integer(),
+                    primary_key=True,
+                    autoincrement=True)
+    
+    title = db.Column(db.String(100),
+                    nullable=True)
+
+    content = db.Column(db.String(),
+                    unique=True)
+                    
+    username = db.Column(db.String,
+                    db.ForeignKey('users.username'))
+
+    user = db.relationship("User", backref="feedbacks")

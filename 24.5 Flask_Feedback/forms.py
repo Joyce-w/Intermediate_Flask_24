@@ -13,3 +13,8 @@ class LoginForm(FlaskForm):
     """Form for login"""
     username = StringField("Username")
     password = PasswordField("Password")
+
+class FeedbackForm(FlaskForm):
+    """Feedback form """
+    title = StringField("Title")
+    Feedback = StringField("Feedback")

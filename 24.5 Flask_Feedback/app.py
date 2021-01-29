@@ -1,8 +1,7 @@
 from flask import Flask, request, render_template,  redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User
-from forms import AddRegistrationForm, LoginForm
-
+from models import db, connect_db, User, Feedback
+from forms import AddRegistrationForm, LoginForm, FeedbackForm
 
 # app created 
 app = Flask(__name__)
@@ -46,7 +45,7 @@ def register():
         db.session.commit()
 
         # set user to session
-        session['curr_user'] = user.id
+        session['curr_user'] = user.username
 
         return redirect('/secret')
     else:
@@ -70,14 +69,29 @@ def login():
 
         user = User.authenticate(username, password)
         if user:
-            session['curr_user'] = user.id
-            return redirect('/secret')
+            session['curr_user'] = user.username
+
+            return redirect(f"/users/{user.username}")
         else:
             form.username.errors = ['invalid username or password!']
 
     return render_template('login.html',  form=form)
 
+@app.route('/users/<curr_user>')
+def display_user_info(curr_user):
+    """Display user information"""
+
+    form = FeedbackForm()
+    if 'curr_user' in session:
+        user = User.query.get_or_404(curr_user)
+
+        return render_template('user_info.html', user=user, form=form)
+
+    else:
+        return redirect('/login')
+
+
 @app.route('/logout')
 def logout_user():
     session.pop('curr_user')
-    return redirect('/')
+    return redirect('/login')
