@@ -1,0 +1,32 @@
+{% extends 'base.html'%}
+
+{% block content%}
+
+
+<div class="container mt-5">
+    <div class="row " style="width: 25rem">
+        <form action="/users/{{user.username}}/feedback/add" method="POST">
+            
+            <h1 class="display-3">Leave feedback</h1>
+            {{ form.hidden_tag() }}
+            {% for field in form
+                    if field.widget.input_type != 'hidden' %}
+            <p>
+                {{field.label}}
+                {{field(class_="form-control")}}
+
+
+                {% for error in field.errors %}
+                {{ error }}
+                {% endfor %}
+
+            </p>
+
+            {% endfor %}
+            <button type="submit" class="btn btn-success">Add Feedback</button>
+        </form>
+    </div>
+</div>
+
+
+{% endblock%}

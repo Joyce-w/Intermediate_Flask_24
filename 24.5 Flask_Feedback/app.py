@@ -22,7 +22,7 @@ db.create_all()
 def homepage():
     """show homepage"""
 
-    return redirect('/register')
+    return redirect('/login')
 
 @app.route('/register', methods=["GET","POST"])
 def register():
@@ -90,6 +90,55 @@ def display_user_info(curr_user):
     else:
         return redirect('/login')
 
+@app.route('/users/<curr_user>/delete', methods=["POST"])
+def delete_user(curr_user):
+    """Delete user"""
+    
+    user = User.query.get_or_404(curr_user)
+    if 'curr_user' in session and session['curr_user'] == user.username:
+        user.delete()
+        db.session.commit()
+
+    return redirect('/')
+
+@app.route('/users/<curr_user>/feedback/add', methods=["GET", "POST"])
+def add_feedback(curr_user):
+    """check for curr user and display feedback form"""
+    user = User.query.get_or_404(curr_user)
+    if 'curr_user' not in session:
+        return redirect('/login')
+
+    else:
+        form = FeedbackForm()
+        if form.validate_on_submit():
+            title = form.title.data
+            content = form.feedback.data
+
+            # create new instance of feedback
+            feedback = Feedback(title=title, content=content, username=user.username)
+            db.session.add(feedback)
+            db.session.commit()
+
+    return render_template('feedback_form.html', form=form, user=user)
+    
+@app.route('/feedback/<int:feedback_id>/update', methods=["GET","POST"])
+def edit_feedback(feedback_id):
+    f = Feedback.query.get_or_404(feedback_id)
+    
+    if 'curr_user' in session:
+        s = session['curr_user']
+        if s == f.username:
+            form = FeedbackForm(obj=f)
+            if form.validate_on_submit():
+                f.title = form.title.data
+                f.content = form.feedback.data
+                db.session.commit()
+    return render_template('edit_feedback.html',form=form,f=f)
+
+
+# feedback post delete route
+# fix user delete
+# add btns for delete
 
 @app.route('/logout')
 def logout_user():

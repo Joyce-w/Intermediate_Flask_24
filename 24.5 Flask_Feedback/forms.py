@@ -17,4 +17,4 @@ class LoginForm(FlaskForm):
 class FeedbackForm(FlaskForm):
     """Feedback form """
     title = StringField("Title")
-    Feedback = StringField("Feedback")
+    feedback = StringField("Feedback")
