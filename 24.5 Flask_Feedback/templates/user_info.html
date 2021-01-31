@@ -2,6 +2,8 @@
 
 {% block content%}
 
+<div class="container">
+
 <h1>hello {{user.first_name}}!</h1>
 
     <p>
@@ -14,6 +16,11 @@
         email:{{user.email}}
     </p>
 
+    <form action="/users/{{user.username}}/delete", method="POST">
+    <button class="btn btn-danger">Delete User</button>
+    </form>
+
+<hr>
     <div>
         <h3>Feedbacks you left</h3>
         <ul>
@@ -21,13 +28,23 @@
         {% for f in user.feedbacks %}
          <li>
         {{f.title}} :
-        {{f.content}}             
+        {{f.content}}  
+        {{user.feedbacks.id}}
+
+        {% if session['curr_user'] == f.username %}
+        <form style="display: inline" action="/feedback/{{f.id}}/delete" , method="POST">
+            <button style="display: inline" class="btn btn-danger"> x </button>            
+        </form>
+        {% endif %}
          </li>
 
         {% endfor %}
         </ul>
         <a href="/users/{{user.username}}/feedback/add" <button class="btn btn-primary">Add Feedback</button></a>
     </div>
+
+</div>
+
 
 
 {% endblock%}
